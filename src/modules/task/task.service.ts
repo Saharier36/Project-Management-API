@@ -46,6 +46,7 @@ async function verifyAssigneeExists(assignedToId: string | undefined) {
 
   const user = await prisma.user.findUnique({
     where: { id: assignedToId },
+    select: { id: true },
   });
 
   if (!user) {

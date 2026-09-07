@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 /**
  * API Routes
@@ -63,6 +63,14 @@ app.use((req: Request, res: Response) => {
  * bubbles down here to ensure consistent error responses without leaking stack traces.
  */
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+  if (err instanceof SyntaxError && "body" in err) {
+    res.status(400).json({
+      success: false,
+      message: "Malformed JSON in request body",
+    });
+    return;
+  }
+
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       success: false,
