@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { Prisma } from "@prisma/client";
 import { AppError } from "./utils/AppError";
 import authRoutes from "./modules/auth/auth.routes";
+import projectRoutes from "./modules/project/project.routes";
 
 const app: Application = express();
 
@@ -28,6 +29,7 @@ app.use(express.json());
  * API Routes
  */
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
 
 /**
  * Health Check Endpoint:
