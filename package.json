@@ -2,11 +2,19 @@
   "name": "project-task-management-api",
   "version": "1.0.0",
   "description": "A RESTful API for managing projects and tasks",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.3"
+  }
 }
