@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import { AppError } from "./utils/AppError";
 import authRoutes from "./modules/auth/auth.routes";
 import projectRoutes from "./modules/project/project.routes";
+import { nestedTaskRouter, taskRouter } from "./modules/task/task.routes";
 
 const app: Application = express();
 
@@ -30,6 +31,8 @@ app.use(express.json());
  */
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/projects/:projectId/tasks", nestedTaskRouter);
+app.use("/api/tasks", taskRouter);
 
 /**
  * Health Check Endpoint:
