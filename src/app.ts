@@ -4,6 +4,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import { Prisma } from "@prisma/client";
 import { AppError } from "./utils/AppError";
+import authRoutes from "./modules/auth/auth.routes";
 
 const app: Application = express();
 
@@ -22,6 +23,11 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 app.use(express.json());
+
+/**
+ * API Routes
+ */
+app.use("/api/auth", authRoutes);
 
 /**
  * Health Check Endpoint:
