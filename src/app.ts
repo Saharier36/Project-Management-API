@@ -2,6 +2,8 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
+import { Prisma } from "@prisma/client";
+import { AppError } from "./utils/AppError";
 
 const app: Application = express();
 
@@ -49,7 +51,33 @@ app.use((req: Request, res: Response) => {
  * identifies it as an error handler. Any error passed to next(err) in preceding handlers
  * bubbles down here to ensure consistent error responses without leaking stack traces.
  */
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+    });
+    return;
+  }
+
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === "P2002") {
+      res.status(409).json({
+        success: false,
+        message: "A record with this value already exists",
+      });
+      return;
+    }
+
+    if (err.code === "P2025") {
+      res.status(404).json({
+        success: false,
+        message: "Record not found",
+      });
+      return;
+    }
+  }
+
   console.error("Internal Server Error:", err);
 
   res.status(500).json({
