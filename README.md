@@ -135,6 +135,10 @@ The application validates the presence of all required environment variables upo
 | `JWT_SECRET` | Secret cryptographic key used to sign and verify JSON Web Tokens | `d694582f0997...` (long random hex string) |
 | `JWT_EXPIRES_IN` | Duration string defining the validity lifespan of issued JWT tokens | `1d` |
 
+> **Note on hosted PostgreSQL providers:** If using a cloud-hosted PostgreSQL provider such as Neon, Supabase, or similar, the `DATABASE_URL` typically requires an additional `?sslmode=require` query parameter for the connection to succeed, e.g.:
+> `postgresql://user:password@host/dbname?sslmode=require`
+> Local PostgreSQL installations usually don't require this.
+
 In production, `JWT_SECRET` should be a cryptographically secure, high-entropy random string. You can generate one via the Node.js CLI:
 
 ```bash
@@ -210,8 +214,8 @@ This section provides complete endpoint specifications, input contracts, and res
 | `POST` | `/api/projects/:projectId/tasks` | Yes | Create a task under a project |
 | `GET` | `/api/projects/:projectId/tasks` | Yes | List tasks (paginated, filterable by status/priority) |
 | `GET` | `/api/tasks/:id` | Yes | Get a single task by ID |
-| `DELETE` | `/api/tasks/:id` | Yes | Delete a task |
 | `PATCH` | `/api/tasks/:id` | Yes | Update a task (partial update) |
+| `DELETE` | `/api/tasks/:id` | Yes | Delete a task |
 
 ---
 
