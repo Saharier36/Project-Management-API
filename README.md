@@ -2,6 +2,10 @@
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white) ![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://project-task-management-api-vn47.onrender.com)
+
+🔗 **Live API Base URL:** https://project-task-management-api-vn47.onrender.com
+
 A robust, production-ready RESTful API built with Node.js, Express 5, TypeScript, PostgreSQL, and Prisma ORM for managing multi-user workspaces, projects, and scoped tasks. The API features secure JWT authentication, granular ownership authorization, transitive project-based access controls, paginated and filterable task queries, strict schema validation using Zod, and centralized, error-resilient middleware.
 
 ---
@@ -12,6 +16,7 @@ A robust, production-ready RESTful API built with Node.js, Express 5, TypeScript
 - [Features](#-features)
 - [Prerequisites](#-prerequisites)
 - [Setup Instructions](#️-setup-instructions)
+- [Live Deployment Notes](#-live-deployment-notes)
 - [Environment Variables](#-environment-variables)
 - [Project Structure](#-project-structure)
 - [Database Design](#️-database-design)
@@ -105,6 +110,17 @@ Follow these numbered steps to configure, migrate, and run the server locally:
    ```bash
    curl -X GET http://localhost:4000/health
    ```
+
+---
+
+## 🌐 Live Deployment Notes
+
+This project is deployed on free-tier hosting for demonstration purposes. A few things to expect when testing the live link, rather than running locally:
+
+- **App cold starts (Render free tier):** The web service spins down after 15 minutes of no incoming traffic. The first request after a period of inactivity can take 30-50 seconds to respond while the service wakes up. Subsequent requests will be fast. This is a Render free-tier limitation, not an application bug.
+- **Database cold starts (Neon free tier):** The PostgreSQL database scales to zero after about 5 minutes of inactivity and reconnects automatically on the next query, adding a small delay (typically a few seconds) to the first request in a while. No data is lost during this — it's a compute pause, not a database shutdown.
+- **Not meant for production traffic:** Free-tier compute and database resources are limited (shared CPU, capped storage, capped bandwidth). This deployment exists to demonstrate the working API, not to serve real production load.
+- **Recommended testing approach:** If a request seems to hang or time out on first try, wait 30-60 seconds and retry — this is almost always a cold start, not an error. The `GET /health` endpoint is a good way to "wake up" the service before running through the full API flow.
 
 ---
 
