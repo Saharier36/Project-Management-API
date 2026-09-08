@@ -1,0 +1,265 @@
+{
+  "info": {
+    "_postman_id": "b7e1f3a0-1c2d-4e5f-8a9b-0c1d2e3f4a5b",
+    "name": "Project & Task Management API",
+    "description": "Backend Intern Hiring Assignment - RESTful API for managing projects and tasks. Set the `token` variable after logging in, and `projectId`/`taskId` after creating a project/task, to run the protected requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "projectId", "value": "", "type": "string" },
+    { "key": "taskId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"strongPassword123\",\n  \"name\": \"Jane Doe\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        },
+        "description": "Register a new user. No authentication required."
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"strongPassword123\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        },
+        "description": "Login and receive a JWT. Copy the token from the response into the collection's `token` variable to run the protected requests below."
+      }
+    },
+    {
+      "name": "Get Me",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "me"]
+        },
+        "description": "Get the current authenticated user's profile."
+      }
+    },
+    {
+      "name": "Create Project",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Mobile App Redesign\",\n  \"description\": \"Redesigning the iOS and Android applications\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/projects",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "projects"]
+        },
+        "description": "Create a new project owned by the authenticated user. Copy the returned `id` into the `projectId` variable."
+      }
+    },
+    {
+      "name": "List Projects",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/projects",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "projects"]
+        },
+        "description": "List all projects owned by the authenticated user."
+      }
+    },
+    {
+      "name": "Get Project by ID",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "projects", "{{projectId}}"]
+        },
+        "description": "Get a single project by ID. Returns 404 if it doesn't exist or isn't owned by the current user."
+      }
+    },
+    {
+      "name": "Update Project",
+      "request": {
+        "method": "PATCH",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Mobile App Redesign v2\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "projects", "{{projectId}}"]
+        },
+        "description": "Partially update a project (name and/or description)."
+      }
+    },
+    {
+      "name": "Delete Project",
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "projects", "{{projectId}}"]
+        },
+        "description": "Delete a project. Cascades to delete all of its tasks."
+      }
+    },
+    {
+      "name": "Create Task",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Setup Authentication Flow\",\n  \"description\": \"Implement JWT login and registration screens\",\n  \"priority\": \"HIGH\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "projects", "{{projectId}}", "tasks"]
+        },
+        "description": "Create a task under a project owned by the authenticated user. Copy the returned `id` into the `taskId` variable."
+      }
+    },
+    {
+      "name": "List Tasks - Paginated & Filtered",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/projects/{{projectId}}/tasks?page=1&limit=10&status=TODO&priority=HIGH",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "projects", "{{projectId}}", "tasks"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "10" },
+            { "key": "status", "value": "TODO" },
+            { "key": "priority", "value": "HIGH" }
+          ]
+        },
+        "description": "List tasks under a project, paginated and filterable by status and priority."
+      }
+    },
+    {
+      "name": "Get Task by ID",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
+        },
+        "description": "Get a single task by ID. Authorization is transitive via the task's parent project."
+      }
+    },
+    {
+      "name": "Update Task",
+      "request": {
+        "method": "PATCH",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
+        },
+        "description": "Partially update a task (title, description, status, priority, or assignedToId)."
+      }
+    },
+    {
+      "name": "Delete Task",
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+        },
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
+        },
+        "description": "Delete a task."
+      }
+    }
+  ]
+}
