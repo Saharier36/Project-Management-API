@@ -8,8 +8,10 @@ import { LoginInput, RegisterInput } from "./auth.validation";
  * Registers a new user.
  */
 export async function registerUser(data: RegisterInput) {
+  const email = data.email.toLowerCase();
+
   const existingUser = await prisma.user.findUnique({
-    where: { email: data.email },
+    where: { email },
   });
 
   if (existingUser) {
@@ -20,7 +22,7 @@ export async function registerUser(data: RegisterInput) {
 
   const newUser = await prisma.user.create({
     data: {
-      email: data.email,
+      email,
       password: hashedPassword,
       name: data.name,
     },
@@ -39,8 +41,10 @@ export async function registerUser(data: RegisterInput) {
  * Authenticates a user and returns a JWT token along with minimal user details.
  */
 export async function loginUser(data: LoginInput) {
+  const email = data.email.toLowerCase();
+
   const user = await prisma.user.findUnique({
-    where: { email: data.email },
+    where: { email },
   });
 
   if (!user) {

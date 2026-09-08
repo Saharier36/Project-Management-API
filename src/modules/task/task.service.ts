@@ -39,8 +39,8 @@ async function findOwnedTaskOrThrow(taskId: string, userId: string) {
 /**
  * Helper to verify that an assigned user exists.
  */
-async function verifyAssigneeExists(assignedToId: string | undefined) {
-  if (!assignedToId) {
+async function verifyAssigneeExists(assignedToId?: string | null) {
+  if (assignedToId === null || assignedToId === undefined) {
     return;
   }
 

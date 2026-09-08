@@ -71,6 +71,19 @@ app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
+  if (
+    err &&
+    typeof err === "object" &&
+    "type" in err &&
+    (err as { type?: string }).type === "entity.too.large"
+  ) {
+    res.status(413).json({
+      success: false,
+      message: "Request body too large",
+    });
+    return;
+  }
+
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       success: false,

@@ -5,7 +5,7 @@ export const createTaskSchema = z.object({
   description: z.string().max(1000, "Description is too long").optional(),
   status: z.enum(["TODO", "IN_PROGRESS", "DONE"]).optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]).optional(),
-  assignedToId: z.string().uuid("Invalid user id").optional(),
+  assignedToId: z.string().uuid("Invalid user id").nullable().optional(),
 });
 
 export const updateTaskSchema = createTaskSchema.partial();
